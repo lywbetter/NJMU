@@ -1,0 +1,38 @@
+library(tidyverse)
+data <- read.csv("D:\\A-NJMU\\研一下课程\\R语言在医学研究中的应用\\流行病与卫生统计学_2023110317_李雨薇\\data1.csv")
+
+#### normality test ####  
+shapiro.test(data$height_cm)
+shapiro.test(data$vital_capacity_L)
+
+#### correlation ####
+cor.test(data$height_cm,data$vital_capacity_L, method = "pearson", alternative = "two.sided")
+
+#1 建立检验假设 H0: ρ=0，肺活量与身高无相关关系；H1: ρ≠0，肺活量与身高有相关关系。α=0.05
+#2 计算检验统计量 r = 0.6500136, t = 6.5143, df = 58, p-value = 1.908e-08
+#3 统计推断 按照α=0.05水准，拒绝H0，接受H1，差异有统计学意义。
+#4 结论 线性相关分析结果表明，女医学生的肺活量与身高之间有正相关关系，相关系数r为0.650 (95%CI=0.474-0.776,p=1.91e-08)。
+
+#plot(data$height_cm, data$vital_capacity_L, main="Scatterplot of Lung Capacity and Height",
+#     xlab="Height (cm)", ylab="Lung Capacity (L)", pch=19)
+#abline(lm(vital_capacity_L ~ height_cm, data=data), col="#c62d17")
+
+#### visualization ####
+ggplot(data, aes(x = height_cm , y = vital_capacity_L))+
+  geom_point(color="steelblue") +
+  #geom_smooth(method = "lm", se = FALSE, color = "firebrick") +
+  geom_text(label = "pearson r= 0.650, p=1.91e-08",
+            x = Inf, y = Inf, hjust = 1.1, vjust = 28) +
+  labs(title = "Scatterplot of height and lung capacity",
+       x ="Height (cm)" , y = "Lung Capacity (L)") +
+  theme_minimal()+
+  theme(plot.title = element_text(hjust = 0.5),  # 设置标题居中
+                        panel.border = element_rect(color = "black", fill = NA, size = 1))
+
+#### linear regression ####  
+a<-lm(data$vital_capacity_L~data$height_cm) 
+
+summary(a)
+print(a)
+#女医学生的肺活量与身高之间的直线回归方程为vital_capacity_L = -7.458 + 0.065 × height_cm 方程具有统计学意义p-value: 1.908e-08。
+#回归系数的含义：女医学生的身高每增加1cm，肺活量平均增加0.065L。
