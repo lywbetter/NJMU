@@ -1,5 +1,5 @@
 library(tidyverse)
-data <- read.csv("D:\\A-NJMU\\研一下课程\\R语言在医学研究中的应用\\流行病与卫生统计学_2023110317_李雨薇\\data1.csv")
+data <- read.csv("D:\\A-NJMU\\xxxx\\xxxx\\xxxxx\\data1.csv")
 
 #### normality test ####  
 shapiro.test(data$height_cm)
